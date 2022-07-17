@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class MainScreen extends StatelessWidget {
-   const MainScreen({Key? key}) : super(key: key);
+
+   WebViewController? controller;
+   final homeUrl = 'https://blog.codefactory.ai';
+
+   MainScreen({Key? key}) : super(key: key);
  
    @override
    Widget build(BuildContext context) {
@@ -10,12 +14,25 @@ class MainScreen extends StatelessWidget {
        appBar: AppBar(
          backgroundColor: Colors.orange,
          title: Text('Henry flutter'),
-
+         centerTitle: true,
+         actions: [
+           IconButton(onPressed: (){
+             if(controller == null) {
+               return;
+             }
+             controller!.loadUrl(homeUrl);
+           },
+               icon: Icon(
+                Icons.home,
+           ))
+         ],
        ),
-       body: Center(
-         child: WebView(
-           initialUrl: 'https://blog.codefactory.ai',
-         ),
+       body: WebView(
+         onWebViewCreated: (WebViewController controller){
+           this.controller = controller;
+         },
+         initialUrl: homeUrl,
+         javascriptMode: JavascriptMode.unrestricted,
        ),
      );
    }
