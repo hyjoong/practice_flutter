@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class dDayScreen extends StatelessWidget {
@@ -64,7 +65,28 @@ class _TopPart extends StatelessWidget {
           ),
           IconButton(
               iconSize: 60.0,
-              onPressed: () {},
+              onPressed: () {
+                // dialog
+                showCupertinoDialog(
+                  context: context,
+                  barrierDismissible: true, // 요소 밖을 클릭하면 닫힘
+                  builder: (BuildContext context) {
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        color: Colors.white,
+                        height: 300.0,
+                        child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.date,
+                          onDateTimeChanged: (DateTime date){
+                            print(date);
+                          }, // 날짜나 시간이 바뀌었을 때
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
               icon: Icon(
                 Icons.favorite,
                 color: Colors.red,
