@@ -26,11 +26,24 @@ class dDayScreen extends StatelessWidget {
   }
 }
 
-class _TopPart extends StatelessWidget {
+class _TopPart extends StatefulWidget {
   const _TopPart({Key? key}) : super(key: key);
 
   @override
+  State<_TopPart> createState() => _TopPartState();
+}
+
+class _TopPartState extends State<_TopPart> {
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
+  @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -54,7 +67,7 @@ class _TopPart extends StatelessWidget {
                 ),
               ),
               Text(
-                '2022-07-20',
+                '${selectedDate.year}.${selectedDate.month}.${selectedDate.day}',
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'sunflower',
@@ -78,8 +91,16 @@ class _TopPart extends StatelessWidget {
                         height: 300.0,
                         child: CupertinoDatePicker(
                           mode: CupertinoDatePickerMode.date,
-                          onDateTimeChanged: (DateTime date){
-                            print(date);
+                          initialDateTime: selectedDate,
+                          maximumDate: DateTime(
+                            now.year,
+                            now.month,
+                            now.day,
+                          ),
+                          onDateTimeChanged: (DateTime date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
                           }, // 날짜나 시간이 바뀌었을 때
                         ),
                       ),
@@ -92,7 +113,11 @@ class _TopPart extends StatelessWidget {
                 color: Colors.red,
               )),
           Text(
-            'D+1',
+            'D+${DateTime(
+              now.year,
+              now.month,
+              now.day,
+            ).difference(selectedDate).inDays}',
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'sunflower',
@@ -112,6 +137,7 @@ class _BottomPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      // 차지할 수 있는 최대 크기만 차지하라고 설정
       child: Image.asset(
         'asset/img/couple.jpg',
         fit: BoxFit.fill,
