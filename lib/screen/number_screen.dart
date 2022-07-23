@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hello_world/constants/color.dart';
+import 'package:hello_world/screen/settings_screen.dart';
 
 class NumberScreen extends StatefulWidget {
   const NumberScreen({Key? key}) : super(key: key);
@@ -69,7 +70,16 @@ class _Header extends StatelessWidget {
           ),
         ),
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // [NumberScreen(), SettingsScreen()]
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return SettingsScreen();
+                  },
+                ),
+              );
+            },
             icon: Icon(
               Icons.settings,
               color: RED_COLOR,
@@ -92,28 +102,26 @@ class _Body extends StatelessWidget {
           children: randomNumbers
               .asMap()
               .entries
-          // asMap().entries로 key, value값 가져올 수 있음
-          // (0:123), (1:456), (2:789)
+              // asMap().entries로 key, value값 가져올 수 있음
+              // (0:123), (1:456), (2:789)
               .map(
-                (x) =>
-                Padding(
+                (x) => Padding(
                   padding: EdgeInsets.only(bottom: x.key == 2 ? 0 : 16.0),
                   child: Row(
                     children: x.value
                         .toString()
                         .split('')
                         .map(
-                          (y) =>
-                          Image.asset(
+                          (y) => Image.asset(
                             'asset/img/$y.png',
                             height: 70.0,
                             width: 50.0,
                           ),
-                    )
+                        )
                         .toList(),
                   ),
                 ),
-          )
+              )
               .toList()),
     );
   }
