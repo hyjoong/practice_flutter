@@ -12,6 +12,7 @@ class NumberScreen extends StatefulWidget {
 }
 
 class _NumberScreenState extends State<NumberScreen> {
+  int maxNumber = 1000;
   List<int> randomNumbers = [123, 456, 789];
 
   @override
@@ -25,7 +26,7 @@ class _NumberScreenState extends State<NumberScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _Header(),
+              _Header(onPressed: onSettingsPop),
               _Body(
                 randomNumbers: randomNumbers,
               ),
@@ -37,13 +38,28 @@ class _NumberScreenState extends State<NumberScreen> {
     );
   }
 
+  void onSettingsPop() async {
+    final int? result = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return SettingsScreen();
+        },
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        maxNumber = result;
+      });
+    }
+  }
+
   void onRandomNumberGenerate() {
     final rand = Random();
     final Set<int> newNumbers = {}; // 중복 번호가 없게하기 위해서 List 대신 Set
 
     // for(int i=0;i<3;i++){  // 증복 되는 숫자가 나오면 add하지 않아서 2 or 1개만 들어갈 확률이 있음
     while (newNumbers.length != 3) {
-      final number = rand.nextInt(1000);
+      final number = rand.nextInt(maxNumber);
       newNumbers.add(number);
     }
 
@@ -54,7 +70,9 @@ class _NumberScreenState extends State<NumberScreen> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+
+  const _Header({required this.onPressed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +88,7 @@ class _Header extends StatelessWidget {
           ),
         ),
         IconButton(
-            onPressed: () {
-              // [NumberScreen(), SettingsScreen()]
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return SettingsScreen();
-                  },
-                ),
-              );
-            },
+            onPressed: onPressed,
             icon: Icon(
               Icons.settings,
               color: RED_COLOR,
