@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hello_world/component/number_row.dart';
 import 'package:hello_world/constants/color.dart';
 import 'package:hello_world/screen/settings_screen.dart';
 
@@ -42,7 +43,9 @@ class _NumberScreenState extends State<NumberScreen> {
     final int? result = await Navigator.of(context).push<int>(
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return SettingsScreen();
+          return SettingsScreen(
+            maxNumber: maxNumber,
+          );
         },
       ),
     );
@@ -116,19 +119,9 @@ class _Body extends StatelessWidget {
               .map(
                 (x) => Padding(
                   padding: EdgeInsets.only(bottom: x.key == 2 ? 0 : 16.0),
-                  child: Row(
-                    children: x.value
-                        .toString()
-                        .split('')
-                        .map(
-                          (y) => Image.asset(
-                            'asset/img/$y.png',
-                            height: 70.0,
-                            width: 50.0,
-                          ),
-                        )
-                        .toList(),
-                  ),
+                  child: NumberRow(
+                    number: x.value,
+                  )
                 ),
               )
               .toList()),
